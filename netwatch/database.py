@@ -276,5 +276,28 @@ def get_bandwidth_timeline(db_path=DB_NAME):
         if conn:
             conn.close()
 
+def get_session_summary(db_path=DB_NAME):
+    """
+    Returns a dictionary containing total_packets and total_bytes captured.
+    """
+    sql = "SELECT COUNT(id), SUM(size) FROM packets"
+    conn = None
+    try:
+        conn = get_connection(db_path)
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        row = cursor.fetchone()
+        return {
+            "total_packets": row[0] or 0,
+            "total_bytes": row[1] or 0
+        }
+    except sqlite3.Error as e:
+        print(f"Error fetching session summary: {e}")
+        return {"total_packets": 0, "total_bytes": 0}
+    finally:
+        if conn:
+            conn.close()
+
+
 
 

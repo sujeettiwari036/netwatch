@@ -22,7 +22,8 @@ import {
   AlertOctagon, 
   Network, 
   ArrowUpRight, 
-  ListFilter 
+  ListFilter,
+  Download
 } from 'lucide-react';
 
 const API_BASE = window.location.port === '5173' ? 'http://localhost:8000' : '';
@@ -93,6 +94,27 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  const handleExportReport = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/report`);
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'netwatch_report.pdf');
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+      } else {
+        alert("Failed to export report.");
+      }
+    } catch (err) {
+      console.error("Error exporting report:", err);
+      alert("Error exporting report.");
+    }
+  };
+
   return (
     <div className="dashboard-container">
       {/* Header section */}
@@ -101,17 +123,27 @@ function App() {
           <Network size={32} />
           Netwatch <span>Traffic Dashboard</span>
         </h1>
-        <div className="api-status">
-          <span className={`status-dot ${apiOnline ? 'online' : 'offline'}`}></span>
-          {apiOnline ? (
-            <>
-              <Wifi size={16} /> API Online
-            </>
-          ) : (
-            <>
-              <WifiOff size={16} style={{ color: '#ef4444' }} /> API Offline
-            </>
-          )}
+        <div className="header-actions">
+          <button 
+            className="export-btn"
+            onClick={handleExportReport}
+            disabled={!apiOnline}
+          >
+            <Download size={16} />
+            Export Report
+          </button>
+          <div className="api-status">
+            <span className={`status-dot ${apiOnline ? 'online' : 'offline'}`}></span>
+            {apiOnline ? (
+              <>
+                <Wifi size={16} /> API Online
+              </>
+            ) : (
+              <>
+                <WifiOff size={16} style={{ color: '#ef4444' }} /> API Offline
+              </>
+            )}
+          </div>
         </div>
       </header>
 

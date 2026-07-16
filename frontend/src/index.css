@@ -58,6 +58,42 @@ body {
   color: var(--accent-color);
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: 6px;
+  color: var(--text-color);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.export-btn:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.export-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.export-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #3f3f46;
+}
+
 .api-status {
   display: flex;
   align-items: center;
