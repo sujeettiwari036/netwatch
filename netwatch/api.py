@@ -51,3 +51,12 @@ def stats_bandwidth_timeline():
     Returns aggregate packet sizes in 10-second intervals for the last 5 minutes.
     """
     return db.get_bandwidth_timeline(db_path=db.DB_NAME)
+
+# Mount the built frontend static files at root
+from fastapi.staticfiles import StaticFiles
+import os
+
+dist_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"))
+if os.path.exists(dist_dir):
+    app.mount("/", StaticFiles(directory=dist_dir, html=True), name="static")
+

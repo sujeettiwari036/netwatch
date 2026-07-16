@@ -25,7 +25,7 @@ import {
   ListFilter 
 } from 'lucide-react';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = window.location.port === '5173' ? 'http://localhost:8000' : '';
 
 // Protocol breakdown color mapping
 const PROTO_COLORS = {
